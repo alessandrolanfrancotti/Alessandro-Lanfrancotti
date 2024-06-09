@@ -99,4 +99,5 @@ a:active {
 
 .abstract{
 	width: 25%;
+	min-width: 540px;
 }
