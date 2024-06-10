@@ -35,7 +35,7 @@ img{
 	top: 0px;
 	left: 0px;
 	margin: 0px;
-	width:50%;
+	width:100%;
 }
 
 
@@ -44,7 +44,6 @@ img{
 	bottom: 0px; 
 	left: 0px;
 	margin: 5px;
-	width:10%;
 }
 
 
@@ -101,32 +100,3 @@ a:active {
 .abstract{
 	width: 25%;
 }
-
-/* -------------- SMARTPHONE -------------- */
-
-@media (max-width:925px){
-		.abstract{
-			width: 100%;
-		}
-
-		#Footer{
-			width: 25%;
-		}
-
-		#Content{
-			width:50%;
-		}
-
-		body{
-			line-height: 1.1;
-		}
-
-}
-
-
-
-
-
-
-
-
