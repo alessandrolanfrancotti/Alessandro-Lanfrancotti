@@ -1,0 +1,133 @@
+body{
+	margin: 5px;
+    padding: 0px;
+
+	font-size: 15px;
+	line-height: 1;
+	text-align: left;
+}
+
+p{
+	margin: 0px;
+    padding: 0px;
+}
+
+a{
+	margin: 0px;
+    padding: 0px;
+}
+
+img{
+	margin: 0px;
+    padding: 0px;
+    vertical-align: middle;
+    horizontal-align: middle;
+}
+
+#Header{
+	
+	top: 0px; 
+	left: 0px;
+	margin: 0px;
+	width:100%;
+}
+
+#Content{
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	width:50%;
+}
+
+
+#Footer{
+	position:fixed; 
+	bottom: 0px; 
+	left: 0px;
+	margin: 5px;
+	width:10%;
+}
+
+
+a:link {
+	color:rgb(0, 0, 0);
+	text-decoration:none;
+}
+
+a:visited {
+	color:rgb(0, 0, 0);
+	text-decoration:none;
+}
+
+a:hover {
+	color:rgb(100, 100, 100);
+	text-decoration:none;
+}
+
+a:active {
+	color:rgb(0, 0, 255);
+	text-decoration:none;
+}
+
+/* -------------- X -------------- */
+
+.x-Vertical{
+	position:fixed;
+	z-index: 1;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+
+	width:1px;
+	height:7px;
+	background-color: black;
+}
+
+.x-Horizontal{
+	position:fixed;
+	z-index: 1;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	
+	width:12px;
+	height:1px;
+	background-color: black;
+}
+
+/* -------------- abstract -------------- */
+
+.abstract{
+	width: 25%;
+}
+
+/* -------------- SMARTPHONE -------------- */
+
+@media (max-width:925px){
+		.abstract{
+			width: 100%;
+		}
+
+		#Footer{
+			width: 25%;
+		}
+
+		#Content{
+			width:100%;
+		}
+
+		body{
+			line-height: 1.1;
+		}
+
+}
+
+
+
+
+
+
+
+
