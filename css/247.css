@@ -62,40 +62,14 @@
 }
 
 
-/*
-html, body {
-  
-  
-  background-color: rgba(0, 0, 0, 1);
-  margin: 0;
-  padding: 0;
 
-  font-size: 15px;
-  line-height: 1;
 
-  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
-  color: black;
-  text-transform: uppercase;
-  
-  text-align: left;
-  letter-spacing: .1em;
-  
-  
-}
-*/
 
-/*
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-*/
 
 .container {
   background-color: rgba(0, 0, 0, 1);
   width: 100%;
-  height: 100vh;
+  height: 50vh;
   overflow: hidden;
   -webkit-perspective: 1200px;
   perspective: 1200px;
@@ -114,14 +88,10 @@ a {
   transform-style: preserve-3d;
 }
 .boockup {
-  width: auto;
-  height: auto;
   -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
 }
 .book-container {
-  width: auto;
-  height: auto;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   -webkit-animation: 10s rotatingAnimationY linear infinite;
@@ -141,47 +111,51 @@ a {
   background-repeat: repeat;
   background-position: top left;
 }
+
+
+
+
 .book-front {
   background-image: url('../images/book-cover.jpg');
-  width: 630px;
-  height: 390px;
-  -webkit-transform: translate3d(-315px ,-195px ,4.5px) translate3d(0,0,0) rotateY(0deg);
-  transform: translate3d(-315px ,-195px ,4.5px) translate3d(0,0,0) rotateY(0deg);
+  width: 294px;
+  height: 182px;
+  -webkit-transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(0,0,0) rotateY(0deg);
+  transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(0,0,0) rotateY(0deg);
 }
 .book-side-left {
   background-image: url('../images/book-spine.jpg');
-  width: 9px;
-  height: 390px;
-  -webkit-transform: translate3d(-315px ,-195px ,4.5px) translate3d(-4.5px, 0, -4.5px) rotateY(-90deg);
-  transform: translate3d(-315px ,-195px ,4.5px) translate3d(-4.5px, 0, -4.5px) rotateY(-90deg);
+  width: 4.199999999999999px;
+  height: 182px;
+  -webkit-transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(-2.0999999999999996px, 0, -2.0999999999999996px) rotateY(-90deg);
+  transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(-2.0999999999999996px, 0, -2.0999999999999996px) rotateY(-90deg);
 }
 .book-side-right {
   background-image: url('../images/book-side.jpg');
-  width: 9px;
-  height: 390px;
-  -webkit-transform: translate3d(-315px ,-195px ,4.5px) translate3d(625.5px, 0px,-4.5px) rotateY(90deg);
-  transform: translate3d(-315px ,-195px ,4.5px) translate3d(625.5px, 0px,-4.5px) rotateY(90deg);
+  width: 4.199999999999999px;
+  height: 182px;
+  -webkit-transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(291.9px, 0px,-2.0999999999999996px) rotateY(90deg);
+  transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(291.9px, 0px,-2.0999999999999996px) rotateY(90deg);
 }
 .book-top {
   background-image: url('../images/book-top.jpg');
   background-position: bottom right;
-  width: 630px;
-  height: 9px;
-  -webkit-transform: translate3d(-315px, -195px ,4.5px) translate3d(0px, -4.5px, -4.5px) rotateX(90deg);
-  transform: translate3d(-315px, -195px ,4.5px) translate3d(0px, -4.5px, -4.5px) rotateX(90deg);
+  width: 294px;
+  height: 4.199999999999999px;
+  -webkit-transform: translate3d(-147px, -91px ,2.0999999999999996px) translate3d(0px, -2.0999999999999996px, -2.0999999999999996px) rotateX(90deg);
+  transform: translate3d(-147px, -91px ,2.0999999999999996px) translate3d(0px, -2.0999999999999996px, -2.0999999999999996px) rotateX(90deg);
 }
 .book-bottom {
   background-image: url('../images/book-top.jpg');
-  width: 630px;
-  height: 9px;
-  -webkit-transform: translate3d(-315px ,-195px ,4.5px) translate3d(0px, 385.5px, -4.5px) rotateX(-90deg);
-  transform: translate3d(-315px ,-195px ,4.5px) translate3d(0px, 385.5px, -4.5px) rotateX(-90deg);
+  width: 294px;
+  height: 4.199999999999999px;
+  -webkit-transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(0px, 179.9px, -2.0999999999999996px) rotateX(-90deg);
+  transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(0px, 179.9px, -2.0999999999999996px) rotateX(-90deg);
 }
 .book-back {
   background-image: url('../images/book-back.jpg');
-  width: 630px;
-  height: 390px;
-  -webkit-transform: translate3d(-315px ,-195px ,4.5px) translate3d(0,0, -9px) rotateY(180deg);
-  transform: translate3d(-315px ,-195px ,4.5px) translate3d(0,0, -9px) rotateY(180deg);
+  width: 294px;
+  height: 182px;
+  -webkit-transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(0,0, -4.199999999999999px) rotateY(180deg);
+  transform: translate3d(-147px ,-91px ,2.0999999999999996px) translate3d(0,0, -4.199999999999999px) rotateY(180deg);
 }
    
