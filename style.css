@@ -45,7 +45,15 @@ img{
 	bottom: 0px; 
 	left: 0px;
 	margin: 5px;
-	width:100%;
+	width:10%;
+}
+
+#animegif{
+	position:fixed; 
+	bottom: 0px; 
+	left: 0px;
+	margin: 5px;
+	width:25%;
 }
 
 
@@ -103,6 +111,13 @@ a:active {
 	width: 25%;
 }
 
+/* -------------- anime -------------- */
+
+.animegif{
+	width: 25%;
+	height: auto;
+}
+
 /* -------------- SMARTPHONE -------------- */
 
 @media (max-width:925px){
@@ -117,6 +132,11 @@ a:active {
 		#Content{
 			width:100%;
 		}
+
+		#animegif{
+			width: auto;
+		}
+
 
 		body{
 			line-height: 1.1;
