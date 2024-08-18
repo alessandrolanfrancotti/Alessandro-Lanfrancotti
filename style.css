@@ -58,22 +58,22 @@ img{
 
 
 a:link {
-	color:rgb(0, 0, 0);
+	color:rgb(255, 95, 31);
 	text-decoration:none;
 }
 
 a:visited {
-	color:rgb(0, 0, 0);
+	color:rgb(255, 95, 31);
 	text-decoration:none;
 }
 
 a:hover {
-	color:rgb(100, 100, 100);
+	color:rgb(0, 0, 255);
 	text-decoration:none;
 }
 
 a:active {
-	color:rgb(0, 0, 255);
+	color:rgb(255, 95, 31);
 	text-decoration:none;
 }
 
