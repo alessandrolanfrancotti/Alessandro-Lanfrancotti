@@ -5,7 +5,7 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "alessandro-lanfrancotti-db"
-database_id = "placeholder"
+database_id = "3cd0cbdf-6cf7-494e-b26e-5de2c82b0800"
 
 [[r2_buckets]]
 binding = "R2_BUCKET"
