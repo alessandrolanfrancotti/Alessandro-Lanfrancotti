@@ -22,6 +22,7 @@ export async function onRequestGet(context) {
 
   return Response.json({
     projects: projects.results.map(p => ({
+      id: p.id,
       title: p.title,
       slug: p.slug,
       workType: p.work_type,

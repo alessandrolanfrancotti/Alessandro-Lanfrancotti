@@ -21,9 +21,12 @@
         playsinline
         preload="metadata"
         disablepictureinpicture
-      >
-        <source src="/media/video-homepage.mp4" type="video/mp4" />
-      </video>
+      ></video>
+      <script>
+        fetch('/api/homepage').then(r=>r.json()).then(d=>{
+          if(d.src){var v=document.getElementById('bgVideo');v.src=d.src;v.load();}
+        }).catch(()=>{});
+      </script>
     </div>
 
     <div class="stage__overlay" aria-hidden="true"></div>

@@ -8,6 +8,7 @@ export async function onRequestGet(context) {
 
   return Response.json({
     foundry: rows.results.map(f => ({
+      id: f.id,
       name: f.name,
       slug: f.slug,
       tagline: f.tagline,

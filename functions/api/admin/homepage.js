@@ -25,12 +25,28 @@ export async function onRequestPut(context) {
   return Response.json({ success: true, src: `/media/${r2Key}` });
 }
 
+// DELETE /api/admin/homepage — remove homepage video
+export async function onRequestDelete(context) {
+  const { DB, R2_BUCKET } = context.env;
+
+  const row = await DB.prepare("SELECT value FROM settings WHERE key = 'homepage_video'").first();
+  if (row?.value) {
+    await R2_BUCKET.delete(row.value);
+  }
+  await DB.prepare("DELETE FROM settings WHERE key = 'homepage_video'").run();
+
+  return Response.json({ success: true });
+}
+
 // GET /api/admin/homepage — get homepage video info
 export async function onRequestGet(context) {
   const { DB } = context.env;
 
   const row = await DB.prepare("SELECT value FROM settings WHERE key = 'homepage_video'").first();
-  const r2Key = row?.value || 'video-homepage.mp4';
 
-  return Response.json({ src: `/media/${r2Key}` });
+  if (!row?.value) {
+    return Response.json({ src: null });
+  }
+
+  return Response.json({ src: `/media/${row.value}` });
 }

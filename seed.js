@@ -18,7 +18,7 @@ const ASSETS = path.join(ROOT, 'assets');
 const DB_NAME = 'alessandro-lanfrancotti-db';
 const BUCKET = 'alessandro-lanfrancotti-media';
 const isLocal = process.argv.includes('--local');
-const localFlag = isLocal ? ' --local' : '';
+const localFlag = isLocal ? ' --local' : ' --remote';
 
 function run(cmd) {
   console.log('> ' + cmd);

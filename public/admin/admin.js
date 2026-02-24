@@ -243,6 +243,11 @@ function parsePricing(text) {
 // ── Bind Events ─────────────────────────────────────────────────
 function bind() {
   // ── Homepage video ──
+  // Load current state
+  api('/api/admin/homepage').then(data => {
+    $('homepage-video-hint').textContent = data.src ? 'Current: ' + data.src : 'No video set';
+  }).catch(() => {});
+
   $('homepage-video').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -251,8 +256,20 @@ function bind() {
       const fd = new FormData();
       fd.append('file', file);
       await api('/api/admin/homepage', { method: 'PUT', body: fd });
-      $('homepage-video-hint').textContent = 'Uploaded: ' + file.name;
+      $('homepage-video-hint').textContent = 'Current: /media/video-homepage.mp4';
       status('Homepage video updated.');
+    } catch (err) {
+      status('Error: ' + err.message);
+    }
+  });
+
+  $('homepage-video-remove').addEventListener('click', async () => {
+    if (!confirm('Remove the homepage video?')) return;
+    status('Removing homepage video…');
+    try {
+      await api('/api/admin/homepage', { method: 'DELETE' });
+      $('homepage-video-hint').textContent = '';
+      status('Homepage video removed.');
     } catch (err) {
       status('Error: ' + err.message);
     }

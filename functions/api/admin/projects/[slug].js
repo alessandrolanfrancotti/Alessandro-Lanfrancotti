@@ -1,6 +1,6 @@
 // PUT /api/admin/projects/:slug — update project
 export async function onRequestPut(context) {
-  const { DB } = context.env;
+  const { DB, R2_BUCKET } = context.env;
   const slug = context.params.slug;
   const body = await context.request.json();
 
@@ -23,10 +23,12 @@ export async function onRequestPut(context) {
     ).bind(project.id).all();
     const keepIds = new Set(body.media.map(m => m.id));
 
-    // Delete removed media rows (R2 files managed separately via /api/admin/media)
+    // Delete removed media from R2 + D1
     const toDelete = current.results.filter(m => !keepIds.has(m.id));
     for (const m of toDelete) {
+      await R2_BUCKET.delete(m.r2_key);
       await DB.prepare('DELETE FROM project_media WHERE id = ?').bind(m.id).run();
+      await DB.prepare('DELETE FROM media WHERE r2_key = ?').bind(m.r2_key).run();
     }
 
     // Update positions for kept media
