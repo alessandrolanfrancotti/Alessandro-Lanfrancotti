@@ -42,7 +42,7 @@ export async function onRequest(context) {
       return new Response(null, {
         status: 302,
         headers: {
-          'Location': '/admin/',
+          'Location': '/admin/__session',
           'Set-Cookie': `al_auth=${token}; Max-Age=14400; Path=/; HttpOnly; Secure; SameSite=Lax`,
         },
       });
@@ -51,13 +51,32 @@ export async function onRequest(context) {
     return loginPage(true);
   }
 
-  // Verify cookie
-  const cookie = parseCookie(request.headers.get('Cookie') || '', 'al_auth');
-  if (cookie && await verifyToken(cookie, env.AUTH_SECRET)) {
-    return next();
+  // GET logout — clear cookie and redirect to login
+  if (request.method === 'GET' && path === '/admin/__logout') {
+    return new Response(null, {
+      status: 302,
+      headers: {
+        'Location': '/admin/',
+        'Set-Cookie': 'al_auth=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax',
+      },
+    });
   }
 
-  return loginPage(false);
+  // Verify cookie
+  const cookie = parseCookie(request.headers.get('Cookie') || '', 'al_auth');
+  if (!cookie || !await verifyToken(cookie, env.AUTH_SECRET)) {
+    return loginPage(false);
+  }
+
+  // GET session bridge — set sessionStorage via JS then redirect to admin
+  if (request.method === 'GET' && path === '/admin/__session') {
+    return new Response(
+      `<!DOCTYPE html><html><head><script>sessionStorage.setItem('al_session','1');location.replace('/admin/');</script></head><body></body></html>`,
+      { status: 200, headers: { 'Content-Type': 'text/html;charset=UTF-8' } }
+    );
+  }
+
+  return next();
 }
 
 async function generateToken(secret) {

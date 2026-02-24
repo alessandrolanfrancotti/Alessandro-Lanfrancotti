@@ -3,6 +3,13 @@
  *  No localStorage, no ZIP export — data lives in D1 + R2.
  * ────────────────────────────────────────────────────────────── */
 
+// Session check: require re-login if tab was closed (sessionStorage is tab-scoped)
+if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+  if (!sessionStorage.getItem('al_session')) {
+    location.replace('/admin/__logout');
+  }
+}
+
 // ── State ───────────────────────────────────────────────────────
 let aboutData  = { statement: '', lines: [], contacts: [], media: [] };
 let projects   = [];
