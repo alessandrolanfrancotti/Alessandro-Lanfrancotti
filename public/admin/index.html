@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Admin — Alessandro Lanfrancotti</title>
+  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+
+<body class="page">
+  <div id="site-header"></div>
+
+  <main class="page__main">
+    <div class="page__block admin">
+      <p><strong>Admin</strong></p>
+      <p>Le modifiche vengono salvate direttamente sul sito.</p>
+      <p id="status-msg" style="color:var(--hover);"></p>
+
+      <hr>
+
+      <!-- HOMEPAGE VIDEO -->
+      <details>
+        <summary><strong>Homepage Video</strong></summary>
+        <p style="margin-top:12px;">Video di sfondo della homepage</p>
+        <input id="homepage-video" type="file" accept="video/*" />
+        <p class="hint" id="homepage-video-hint" style="color:var(--hover); margin-top:6px;"></p>
+      </details>
+
+      <hr>
+
+      <!-- ABOUT -->
+      <details open>
+        <summary><strong>About</strong></summary>
+
+        <p style="margin-top:12px;">Statement</p>
+        <textarea id="about-statement" rows="3"></textarea>
+
+        <p>Visual media (image/gif/video)</p>
+        <input id="about-media" type="file" accept="image/*,video/*" />
+        <div class="media-grid" id="about-media-grid" aria-label="About media preview"></div>
+        <p><button class="link" id="about-media-clear" type="button">Clear media</button></p>
+
+        <p>Lines (una per riga)</p>
+        <textarea id="about-lines" rows="5"></textarea>
+
+        <p>Contacts (Label | Value | href opzionale)</p>
+        <textarea id="about-contacts" rows="6"></textarea>
+
+        <p style="margin-top:12px;">
+          <button class="link" id="about-save" type="button">Save About</button>
+        </p>
+      </details>
+
+      <hr>
+
+      <!-- PROJECTS -->
+      <details id="projects-details" open>
+        <summary><strong>Projects</strong></summary>
+
+        <p style="margin-top: 12px;">
+          <button class="link" id="proj-add">+ Add project</button>
+          <span class="sep">/</span>
+          <button class="link" id="proj-del">Delete selected</button>
+          <span class="sep">/</span>
+          <button class="link" id="proj-order-open" type="button">Reorder</button>
+        </p>
+
+        <select id="proj-list" size="10" style="width:100%"></select>
+
+        <p>Title</p>
+        <input id="proj-title" type="text" />
+
+        <p>Slug</p>
+        <input id="proj-slug" type="text" />
+
+        <p>Work Type</p>
+        <input id="proj-type" type="text" />
+
+        <p>Abstract</p>
+        <textarea id="proj-abstract" rows="4"></textarea>
+
+        <p>Media (images/video)</p>
+        <input id="proj-media" type="file" multiple accept="image/*,video/*" />
+        <div class="media-grid" id="proj-media-grid" aria-label="Project media preview"></div>
+
+        <p>
+          <button class="link" id="proj-save" type="button">Save Project</button>
+        </p>
+      </details>
+
+      <hr>
+
+      <!-- FOUNDRY / GRAY GARDEN -->
+      <details id="foundry-details" open>
+        <summary><strong>Gray Garden (Foundry)</strong></summary>
+
+        <p style="margin-top: 12px;">
+          <button class="link" id="gg-add">+ Add typeface</button>
+          <span class="sep">/</span>
+          <button class="link" id="gg-del">Delete selected</button>
+          <span class="sep">/</span>
+          <button class="link" id="gg-order-open" type="button">Reorder</button>
+        </p>
+
+        <select id="gg-list" size="8" style="width:100%"></select>
+
+        <p>Typeface name</p>
+        <input id="gg-name" type="text" />
+
+        <p>Slug</p>
+        <input id="gg-slug" type="text" />
+
+        <p>Tagline (short)</p>
+        <input id="gg-tagline" type="text" />
+
+        <p>Description</p>
+        <textarea id="gg-desc" rows="4"></textarea>
+
+        <p>Preview font (WOFF2/WOFF)</p>
+        <input id="gg-preview-font" type="file" accept=".woff2,.woff" />
+        <p class="hint" id="gg-preview-font-hint" style="color:var(--hover); margin-top:6px;"></p>
+
+        <p>Trial download (ZIP)</p>
+        <input id="gg-trial-zip" type="file" accept=".zip" />
+        <p class="hint" id="gg-trial-zip-hint" style="color:var(--hover); margin-top:6px;"></p>
+
+        <p>Trial license (PDF/TXT)</p>
+        <input id="gg-trial-license" type="file" accept=".pdf,.txt" />
+        <p class="hint" id="gg-trial-license-hint" style="color:var(--hover); margin-top:6px;"></p>
+
+        <hr>
+
+        <p><strong>Styles list</strong></p>
+        <p style="color:var(--hover); margin-top:-6px;">
+          Una per riga: <code>Label | weight | italic</code> (italic: 0/1).
+        </p>
+        <textarea id="gg-styles" rows="8" placeholder="Regular | 400 | 0&#10;Regular Italic | 400 | 1&#10;Bold | 700 | 0"></textarea>
+
+        <hr>
+
+        <p><strong>Pricing</strong></p>
+        <p style="color:var(--hover); margin-top:-6px;">
+          Una per riga: <code>Band | single+italic | full family</code>
+        </p>
+        <textarea id="gg-pricing" rows="10" placeholder="1-5 | 90 | 250&#10;6-20 | 180 | 450&#10;..."></textarea>
+
+        <p style="margin-top:12px;">
+          <button class="link" id="gg-save" type="button">Save Typeface</button>
+        </p>
+      </details>
+    </div>
+  </main>
+
+  <!-- MODAL: reorder projects -->
+  <div class="modal" id="proj-order-modal" hidden aria-hidden="true">
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Reorder projects">
+      <p><strong>Projects order</strong></p>
+      <div class="order-list" id="proj-order-list"></div>
+      <p style="margin-top: 12px;">
+        <button class="link" id="proj-order-save" type="button">Save Order</button>
+        <span class="sep">/</span>
+        <button class="link" id="proj-order-close" type="button">Close</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- MODAL: reorder foundry -->
+  <div class="modal" id="gg-order-modal" hidden aria-hidden="true">
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Reorder typefaces">
+      <p><strong>Gray Garden order</strong></p>
+      <div class="order-list" id="gg-order-list"></div>
+      <p style="margin-top: 12px;">
+        <button class="link" id="gg-order-save" type="button">Save Order</button>
+        <span class="sep">/</span>
+        <button class="link" id="gg-order-close" type="button">Close</button>
+      </p>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+
+  <script src="/js/site.js"></script>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

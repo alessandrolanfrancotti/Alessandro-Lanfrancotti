@@ -1,0 +1,15 @@
+{
+  "name": "alessandro-lanfrancotti",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "deploy": "wrangler pages deploy public",
+    "db:init": "wrangler d1 execute alessandro-lanfrancotti-db --file=schema.sql",
+    "db:init:local": "wrangler d1 execute alessandro-lanfrancotti-db --file=schema.sql --local",
+    "seed": "node seed.js",
+    "seed:local": "node seed.js --local"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "statement": "Freelance Graphic Designer specialised in brand identity, book and type design.\n\nGray Garden is a collection of personal projects where I share my type foundry, tools, publications, and ongoing experiments.\n",
+  "visualVideo": "",
+  "lines": [
+    "Alessandro Lanfrancotti",
+    "Freelance Graphic Designer",
+    "Based in IT"
+  ],
+  "contacts": [
+    {
+      "label": "Mail",
+      "value": "alessandro.lanfrancotti@gmail.com",
+      "href": ""
+    },
+    {
+      "label": "P. IVA",
+      "value": "08983680722",
+      "href": ""
+    },
+    {
+      "label": "C.F.",
+      "value": "LNFLSN97E18F052J",
+      "href": ""
+    },
+    {
+      "label": "Cell",
+      "value": "(+39) 377 69 10 982",
+      "href": ""
+    }
+  ],
+  "visualMedia": "",
+  "media": [
+    {
+      "file": "/assets/about/01.png"
+    }
+  ]
+}

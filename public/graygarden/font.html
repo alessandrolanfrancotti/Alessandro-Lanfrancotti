@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Typeface</title>
+
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/gray-garden/gg.css">
+</head>
+
+<body class="page">
+
+<div id="site-header"></div>
+
+<main class="page__main">
+  <div class="page__block">
+
+    <h1 id="font-name"></h1>
+    <p id="font-tagline" class="gg-muted"></p>
+
+    <textarea id="tester" class="gg-tester">Type something here…</textarea>
+
+    <div class="gg-controls">
+      <label>Weight
+        <input type="range" id="wght" min="1" max="1000" value="400">
+      </label>
+
+      <label>Size
+        <input type="range" id="size" min="12" max="160" value="64">
+      </label>
+    </div>
+
+    <hr>
+
+    <h2>License estimator</h2>
+
+    <select id="employees"></select>
+
+    <select id="license">
+      <option value="single">Single weight + italic</option>
+      <option value="family">Full family</option>
+    </select>
+
+    <div id="price" class="gg-price">—</div>
+
+    <p class="gg-muted">
+      This is a price estimate.  
+      To purchase contact  
+      <a id="buy-email" href="#">—</a>
+    </p>
+
+    <hr>
+
+    <p>
+      <a id="trial-download" class="link" href="#" download>Download Trial</a>
+      <span class="sep">/</span>
+      <a id="trial-license" class="link" href="#" download>Trial License</a>
+    </p>
+
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/site.js"></script>
+<script src="/gray-garden/gg.js"></script>
+<script>
+loadFontPage();
+</script>
+
+</body>
+</html>

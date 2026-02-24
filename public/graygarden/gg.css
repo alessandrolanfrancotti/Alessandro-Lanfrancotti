@@ -1,0 +1,41 @@
+.gg-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:20px;
+}
+
+.gg-item{
+  display:block;
+  padding:12px;
+  border:1px solid rgba(0,0,0,.2);
+  text-decoration:none;
+  color:inherit;
+}
+
+.gg-item:hover{
+  background:rgba(0,0,0,.04);
+}
+
+.gg-tester{
+  width:100%;
+  min-height:180px;
+  font-size:64px;
+  margin:20px 0;
+}
+
+.gg-controls{
+  display:flex;
+  gap:20px;
+  margin-bottom:20px;
+}
+
+.gg-price{
+  font-size:20px;
+  margin:12px 0;
+}
+
+.gg-muted{
+  color:#777;
+  font-size:12px;
+}

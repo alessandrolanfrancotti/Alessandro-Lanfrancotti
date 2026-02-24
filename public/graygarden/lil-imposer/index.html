@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⛓️ Lil Imposer ⛓️</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --chrome-gradient: linear-gradient(to bottom, #fff 0%, #888 48%, #fff 52%, #444 100%);
+      --chrome-border: linear-gradient(145deg, #fff, #444, #fff, #888);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; overflow: hidden; }
+    
+    body {
+      font-family: 'Impact', sans-serif;
+      background: radial-gradient(circle, #222 0%, #000 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .panel {
+      background: #000;
+      padding: clamp(20px, 4vh, 45px);
+      width: 100%;
+      max-width: 700px;
+      max-height: 98vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      border: 4px solid;
+      border-image: var(--chrome-border) 1;
+      box-shadow: 0 0 15px #fff, 0 0 30px rgba(255,255,255,0.5), inset 0 0 10px #fff;
+    }
+
+    /* ---------- TOP-RIGHT ICON SIZES (shared) ---------- */
+    :root{
+      --corner-pad: 12px;
+      --corner-size: min(140px, 22vw);
+      --corner-gap: 8px;
+    }
+
+    /* ---------- INFO BUTTON ---------- */
+    .info-btn{
+      position: fixed;
+      top: var(--corner-pad);
+      right: var(--corner-pad);
+
+      width: var(--corner-size);
+      height: var(--corner-size);
+
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      z-index: 6000;
+      display: grid;
+      place-items: center;
+
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .info-btn:focus,
+    .info-btn:focus-visible,
+    .info-btn:active{
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    .info-btn img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* ---------- TUTORIAL BUTTON (left of INFO) ---------- */
+    .tutorial-btn{
+      position: fixed;
+      top: var(--corner-pad);
+      right: calc(var(--corner-pad) + var(--corner-size) + var(--corner-gap));
+
+      width: var(--corner-size);
+      height: var(--corner-size);
+
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      z-index: 6000;
+      display: grid;
+      place-items: center;
+
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .tutorial-btn:focus,
+    .tutorial-btn:focus-visible,
+    .tutorial-btn:active{
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    .tutorial-btn img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* ---------- VIDEO MODAL ---------- */
+    .video-wrap{ width: min(860px, 92vw); }
+
+    .video-16x9{
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border: 2px solid #333;
+    }
+
+    .video-16x9 iframe{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* ---------- AUDIO BUTTON ---------- */
+    .audio-btn{
+      position: fixed;
+      top: 12px;
+      left: 12px;
+
+      width: min(140px, 22vw);
+      height: min(140px, 22vw);
+
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      z-index: 6000;
+      display: grid;
+      place-items: center;
+
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .audio-btn img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+
+    .audio-btn.playing img{ animation: spin 2s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* ---------- OVERLAY / MODAL ---------- */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      z-index: 5000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .modal{
+      width: min(720px, 92vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: #000;
+      border: 4px solid;
+      border-image: var(--chrome-border) 1;
+      box-shadow: 0 0 15px #fff, 0 0 30px rgba(255,255,255,0.35), inset 0 0 10px #fff;
+      padding: 18px 18px 16px;
+      position: relative;
+    }
+
+    .modal h2{
+      margin: 0 38px 10px 0;
+      font-family: 'IMPACT', sans-serif;
+      font-size: clamp(1.2rem, 2.4vh, 1.7rem);
+      background: var(--chrome-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal-body{
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: #fff;
+      opacity: 0.95;
+    }
+
+    .modal-close{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      border: 2px solid;
+      border-image: var(--chrome-border) 1;
+      background: #000;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    /* ---------- INFO MODAL: PIC + TERMINAL ---------- */
+    .terminal-layout{ display: flex; gap: 16px; align-items: flex-start; }
+    .terminal-pic{ flex: 0 0 140px; }
+    .terminal-pic img{ width: 140px; height: auto; display: block; border: 2px solid #333; }
+    .terminal-text{ flex: 1; }
+    .terminal-text pre{
+      margin: 0;
+      font-family: "Courier New", monospace;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      color: #888;
+      background: #000;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 520px){
+      .terminal-layout{ flex-direction: column; }
+      .terminal-pic{ flex: 0 0 auto; }
+      .terminal-pic img{ width: 120px; }
+    }
+
+    /* ---------- LOGO ---------- */
+    .logo-wrap {
+      height: clamp(90px, 18vh, 200px);
+      width: 100%;
+      margin: 0 0 15px 0;
+      overflow: hidden;
+    }
+    .logo { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+
+    /* ---------- SECTIONS ---------- */
+    .section {
+      background: rgba(255, 255, 255, 0.02);
+      padding: clamp(10px, 2vh, 20px);
+      margin-bottom: clamp(10px, 2vh, 20px);
+      border: 2px solid;
+      border-image: var(--chrome-border) 1;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: bold;
+      background: var(--chrome-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: clamp(8px, 1.5vh, 15px);
+      background: #000;
+      color: #fff;
+      font-family: 'Impact', sans-serif;
+      font-size: clamp(1rem, 2vh, 1.2rem);
+      text-transform: uppercase;
+      border: 2px solid;
+      border-image: var(--chrome-border) 1;
+      outline: none;
+    }
+
+    /* ---------- MONITOR ---------- */
+    #monitor{
+      margin-top: 10px;
+      font-family: "Courier New", monospace;
+      font-size: 0.8rem;
+      background: #000;
+      color: #888;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      min-height: 40px;
+      line-height: 1.35;
+    }
+    .monitor-ok { color: #00ff00 !important; }
+    .monitor-error { color: #ff4757 !important; }
+
+    /* ---------- UPLOAD ---------- */
+    .upload-zone {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin-bottom: clamp(10px, 2vh, 20px);
+      width: 100%;
+      cursor: pointer;
+      user-select: none;
+    }
+    .upload-wrap { height: clamp(90px, 14vh, 180px); width: 100%; overflow: hidden; }
+    .upload-wrap img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+
+    /* ---------- DOWNLOAD BUTTON ---------- */
+    .btn-img { background: transparent; border: none; padding: 0; width: 100%; cursor: pointer; }
+    .btn-wrap { height: clamp(90px, 14vh, 180px); width: 100%; overflow: hidden; }
+    .btn-wrap img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+
+    /* ---------- SIZES ROW ---------- */
+    .sizes-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: nowrap; }
+    .sizes-row .col-50 { flex: 2 1 0; }
+    .sizes-row .col-25 { flex: 1 1 0; }
+    .sizes-row .col-50, .sizes-row .col-25 { min-width: 0; }
+
+    @media (max-width: 520px) {
+      .sizes-row { flex-wrap: wrap; }
+      .sizes-row .col-50, .sizes-row .col-25 { flex: 1 1 100%; }
+    }
+
+    .hidden { display: none !important; }
+
+    /* ---------- MONO FONT FOR FIELDS ---------- */
+    #sheetSelect, #sigInput, #customW, #customH{
+      font-family: "Courier New", monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      text-transform: none;
+    }
+
+    /* ---------- SIGNATURES ROW: LABEL + CHECKBOX ---------- */
+    .sig-row{ display: flex; align-items: center; gap: 16px; }
+    .sig-row > label:first-child{ flex: 1; }
+
+    .marks-label{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #888;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  font-weight: normal;   /* <-- QUESTA È LA CHIAVE */
+
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+
+    input[type="checkbox"]{
+      width: auto !important;
+      padding: 0 !important;
+      border: none !important;
+      border-image: none !important;
+      background: transparent !important;
+      outline: none !important;
+      vertical-align: middle;
+      margin: 0;
+    }
+
+    /* ---------- CREDITS + CONCEPT ---------- */
+    .credits {
+      position: fixed;
+      bottom: 12px;
+      left: 14px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 0.75rem;
+      color: #fff;
+      z-index: 999;
+      user-select: none;
+    }
+    .credits a {
+      font-family: Impact, sans-serif;
+      font-weight: normal;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+    .credits a:hover { text-decoration: underline; }
+
+    .concept {
+      position: fixed;
+      bottom: 12px;
+      right: 14px;
+      max-width: 180px;
+      font-family: IMPACT, Helvetica, sans-serif;
+      font-weight: bold;
+      font-size: 0.75rem;
+      color: #fff;
+      text-align: right;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      z-index: 999;
+      user-select: none;
+      opacity: 0.9;
+    }
+
+    .modal-close{
+  z-index: 10;
+}
+
+  </style>
+</head>
+
+<div class="credits">
+  ©2026, Designed by 
+  <a href="https://www.instagram.com/alessandro_lanfrancotti/" target="_blank">ALESSANDRO LANFRANCOTTI</a>
+</div>
+
+<div class="concept">
+  Lil Imposer is my small contribution to the DIY fanzine world.<br>
+  My friends and I have been always wasting tons of time making stupid wrong impositions by hand, or trying to use some insane, overcomplicated softwares.<br><br>
+  We just want to print, fold some paper and end up with a book.<br>
+  At some point I had to step in, for the good of the community.<br><br>
+  I decided to make this website: a simple online tool, no installation, no bullshit, to make the imposition straight from your browser.<br><br>
+  It’s made for zines, print tests, ugly books, nice books, broken books.<br>
+  For designers, artists, students and anyone who wants to print stuff without losing their mind.<br><br>
+  Swag designers, have fun.<br>
+  Print. Fold. Repeat.
+</div>
+
+<body>
+  <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoOverlay" aria-label="Info export PDF">
+    <img src="INFO.png" alt="Info">
+  </button>
+
+  <button id="tutorialBtn" class="tutorial-btn" type="button" aria-haspopup="dialog" aria-controls="tutorialOverlay" aria-label="Tutorial">
+    <img src="TUTORIAL.png" alt="Tutorial">
+  </button>
+
+  <button id="audioBtn" class="audio-btn" type="button" aria-label="Play music">
+    <img src="CD-ROM.png" alt="Play music">
+  </button>
+
+  <audio id="bgAudio" src="WizKhalifa-SayYeah.mp3"></audio>
+
+  <div class="panel">
+    <div class="logo-wrap">
+      <img class="logo" src="LILIMPOSER.png" alt="Lil Imposer">
+    </div>
+
+    <div class="section">
+      <div class="sizes-row">
+        <div class="col-50">
+          <label>PAPER SIZES</label>
+          <select id="sheetSelect">
+            <option value="210,297">A4 (Vertical)</option>
+            <option value="297,210">A4 (Horizontal)</option>
+            <option value="420,297">A3 (Horizontal)</option>
+            <option value="297,420">A3 (Vertical)</option>
+            <option value="450,320">SRA3 (Horizontal)</option>
+            <option value="320,450">SRA3 (Vertical)</option>
+            <option value="594,420">A2 (Horizontal)</option>
+            <option value="420,594">A2 (Vertical)</option>
+            <option value="500,700">50x70 (Vertical)</option>
+            <option value="700,500">50x70 (Horizontal)</option>
+            <option value="700,1000">70x100 (Vertical)</option>
+            <option value="1000,700">70x100 (Horizontal)</option>
+            <option value="custom">CUSTOM</option>
+          </select>
+        </div>
+
+        <div class="col-25 hidden" id="customWCol">
+          <label>W mm</label>
+          <input type="number" id="customW" />
+        </div>
+
+        <div class="col-25 hidden" id="customHCol">
+          <label>H mm</label>
+          <input type="number" id="customH" />
+        </div>
+      </div>
+
+      <div id="monitor">&gt; Upload a PDF to begin...</div>
+    </div>
+
+    <div class="section">
+      <div class="sig-row">
+        <label>SIGNATURES SEQUENCE</label>
+
+        <label class="marks-label">
+          <input type="checkbox" id="marksToggle" checked>
+          My PDF has bleed and crop marks
+        </label>
+      </div>
+
+      <input type="text" id="sigInput" placeholder="SEQUENCE" />
+    </div>
+
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="pdfFile" accept="application/pdf" class="hidden">
+      <div class="upload-wrap">
+        <img src="DROPTHEBOOK.png" alt="Drop The Book">
+      </div>
+    </div>
+
+    <button id="runBtn" class="btn-img">
+      <div class="btn-wrap">
+        <img src="DOWNLOAD.png" alt="Download">
+      </div>
+    </button>
+  </div>
+
+  <!-- INFO OVERLAY -->
+  <div id="infoOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <div class="modal" role="document">
+      <button id="infoClose" class="modal-close" type="button" aria-label="Close">×</button>
+      <!--<h2 id="infoTitle">HOW TO EXPORT PROPERLY</h2>-->
+
+      <div class="modal-body terminal-layout">
+        <div class="terminal-pic">
+          <img src="PROPIC.jpg" alt="Me explaining stuff">
+        </div>
+
+        <div class="terminal-text">
+          <pre>> HOW TO EXPORT PROPERLY
+
+> IF YOUR PDF HAS NO BLEED AND NO MARKS:
+            
+> Just export the final page size.
+> NO bleed, NO marks.
+
+-------------------------------------------------------------
+            
+> IF YOUR PDF HAS BLEED AND CROP MARKS:
+            
+> BLEED:
+> 3 mm on outer, top and bottom.
+> NO bleed on the inner (binding) side.
+> Inner bleed won’t kill anyone, but avoid it
+> to prevent weird lines and artifacts in the inner margin.
+
+> MARKS:
+> ONLY crop marks.
+> NO registration marks.
+> NO color bars, NO page info, NO extra stuff.
+> Extra marks will confuse the tool and break the imposition.
+> NO bullshit. ONLY crop marks.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUTORIAL OVERLAY -->
+  <div id="tutorialOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Tutorial video">
+    <div class="modal video-wrap" role="document">
+      <button id="tutorialClose" class="modal-close" type="button" aria-label="Close">×</button>
+      <h2>TUTORIAL</h2>
+
+      <div class="video-16x9">
+        <iframe
+          id="tutorialFrame"
+          src="https://www.youtube.com/embed/Gnbyt7bjC9c"
+          title="Lil Imposer Tutorial"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- UTILS ----------
+    const pt = (mm) => (mm * 72) / 25.4;
+    const ptToMm = (p) => (p * 25.4) / 72;
+
+    // ---------- INNER CROP TOGGLE ----------
+    const INNER_CROP_INCH = 0.3; // 7.62mm
+    const INNER_CROP_PT_MAX = INNER_CROP_INCH * 72;
+    const INNER_CROP_MM_MAX = INNER_CROP_INCH * 25.4;
+
+    let loadedPdf = null;
+
+    // ---------- DOM ----------
+    const sheetSelect = document.getElementById('sheetSelect');
+    const customW = document.getElementById('customW');
+    const customH = document.getElementById('customH');
+    const customWCol = document.getElementById('customWCol');
+    const customHCol = document.getElementById('customHCol');
+
+    const pdfFile = document.getElementById('pdfFile');
+    const uploadZone = document.getElementById('uploadZone');
+    const sigInput = document.getElementById('sigInput');
+    const runBtn = document.getElementById('runBtn');
+    const monitor = document.getElementById('monitor');
+
+    const marksToggle = document.getElementById('marksToggle');
+
+    function getInnerCropPt() {
+      return (marksToggle && marksToggle.checked) ? INNER_CROP_PT_MAX : 0;
+    }
+    function getInnerCropMm() {
+      return (marksToggle && marksToggle.checked) ? INNER_CROP_MM_MAX : 0;
+    }
+
+    // ---------- UI HELPERS ----------
+    function setCustomVisibility() {
+      const isCustom = sheetSelect.value === 'custom';
+      customWCol.classList.toggle('hidden', !isCustom);
+      customHCol.classList.toggle('hidden', !isCustom);
+      checkFit();
+    }
+
+    function getSheetMm() {
+      if (sheetSelect.value === 'custom') {
+        const w = parseFloat(customW.value) || 0;
+        const h = parseFloat(customH.value) || 0;
+        return [w, h];
+      }
+      return sheetSelect.value.split(',').map(Number);
+    }
+
+    function checkFit() {
+      if (!loadedPdf) {
+        monitor.textContent = "> Upload a PDF to begin...";
+        monitor.className = "";
+        return;
+      }
+
+      const pageCount = loadedPdf.getPageCount();
+      if (pageCount % 4 !== 0) {
+        const missing = 4 - (pageCount % 4);
+        monitor.innerHTML = `> ERROR: PAGE COUNT NOT MULTIPLE OF 4 | Pages: ${pageCount} (add ${missing} blank page(s))`;
+        monitor.className = "monitor-error";
+        return;
+      }
+
+      const [sW, sH] = getSheetMm();
+      const firstPage = loadedPdf.getPages()[0];
+      const pW = ptToMm(firstPage.getWidth());
+      const pH = ptToMm(firstPage.getHeight());
+
+      const innerCropMm = getInnerCropMm();
+      const placedW = Math.max(0, pW - innerCropMm);
+
+      const reqW = placedW * 2;
+      const reqH = pH;
+
+      const EPS = 0.5; // tolleranza in mm
+
+      if (sW + EPS >= reqW && sH + EPS >= reqH) {
+        monitor.innerHTML = `> STATUS: OK | Footprint: ${reqW.toFixed(1)}×${reqH.toFixed(1)} mm (inner crop ${innerCropMm.toFixed(2)}mm)`;
+        monitor.className = "monitor-ok";
+      } else {
+        monitor.innerHTML = `> ERROR: SHEET TOO SMALL | Min: ${reqW.toFixed(1)}×${reqH.toFixed(1)} mm (inner crop ${innerCropMm.toFixed(2)}mm)`;
+        monitor.className = "monitor-error";
+      }
+    }
+
+    function autoCalculateSignatures() {
+      if (!loadedPdf) return;
+
+      let total = loadedPdf.getPageCount();
+      if (total % 4 !== 0) total = Math.ceil(total / 4) * 4;
+
+      const plan = [];
+      let tempTotal = total;
+
+      while (tempTotal >= 16) {
+        plan.push(16);
+        tempTotal -= 16;
+      }
+
+      if (tempTotal > 0) {
+        if (plan.length > 0) plan.splice(plan.length - 1, 0, tempTotal);
+        else plan.push(tempTotal);
+      }
+
+      sigInput.value = plan.join(', ');
+    }
+
+    // ---------- EVENTS (PDF + UI) ----------
+    sheetSelect.addEventListener('change', setCustomVisibility);
+    customW.addEventListener('input', checkFit);
+    customH.addEventListener('input', checkFit);
+    marksToggle.addEventListener('change', checkFit);
+
+    uploadZone.addEventListener('click', () => pdfFile.click());
+
+    pdfFile.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const arrayBuffer = await file.arrayBuffer();
+      loadedPdf = await PDFLib.PDFDocument.load(arrayBuffer);
+
+      autoCalculateSignatures();
+      checkFit();
+    });
+
+    runBtn.addEventListener('click', async () => {
+      if (!loadedPdf) return alert("LOAD THE HEAT.");
+
+      try {
+        const { PDFDocument } = PDFLib;
+        const outDoc = await PDFDocument.create();
+
+        const innerCropPt = getInnerCropPt();
+
+        const [sW_mm, sH_mm] = getSheetMm();
+        const sheetW = pt(sW_mm), sheetH = pt(sH_mm);
+
+        const sigPlan = sigInput.value
+          .split(',')
+          .map(n => parseInt(n.trim(), 10))
+          .filter(n => Number.isFinite(n) && n > 0);
+
+        if (sigPlan.length === 0) return alert("INVALID SIGNATURE SEQUENCE.");
+
+        const srcPages = loadedPdf.getPages();
+
+        const bboxesForLeftPlacement = srcPages.map(p => {
+          const w = p.getWidth();
+          const h = p.getHeight();
+          const crop = Math.min(innerCropPt, w);
+          return { left: 0, bottom: 0, right: w - crop, top: h };
+        });
+
+        const bboxesForRightPlacement = srcPages.map(p => {
+          const w = p.getWidth();
+          const h = p.getHeight();
+          const crop = Math.min(innerCropPt, w);
+          return { left: crop, bottom: 0, right: w, top: h };
+        });
+
+        const embeddedLeft = await outDoc.embedPages(srcPages, bboxesForLeftPlacement);
+        const embeddedRight = await outDoc.embedPages(srcPages, bboxesForRightPlacement);
+
+        let totalProcessed = 0;
+
+        for (const sigSize of sigPlan) {
+          for (let i = 0; i < sigSize / 2; i++) {
+            const sheet = outDoc.addPage([sheetW, sheetH]);
+
+            const lIdx = (i % 2 === 0)
+              ? (totalProcessed + sigSize) - 1 - i
+              : totalProcessed + i;
+
+            const rIdx = (i % 2 === 0)
+              ? totalProcessed + i
+              : (totalProcessed + sigSize) - 1 - i;
+
+            const draw = (idx, side) => {
+              if (idx >= srcPages.length) return;
+
+              const p = (side === 'left') ? embeddedLeft[idx] : embeddedRight[idx];
+
+              const x = (side === 'left')
+                ? (sheetW / 2) - p.width
+                : (sheetW / 2);
+
+              const y = (sheetH - p.height) / 2;
+
+              sheet.drawPage(p, { x, y, width: p.width, height: p.height });
+            };
+
+            draw(lIdx, 'left');
+            draw(rIdx, 'right');
+          }
+
+          totalProcessed += sigSize;
+        }
+
+        const pdfBytes = await outDoc.save();
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        window.open(URL.createObjectURL(blob));
+      } catch (e) {
+        console.error(e);
+        alert("SOMETHING BROKE. CHECK CONSOLE.");
+      }
+    });
+
+    // ---------- INFO MODAL ----------
+    const infoBtn = document.getElementById('infoBtn');
+    const infoOverlay = document.getElementById('infoOverlay');
+    const infoClose = document.getElementById('infoClose');
+
+    function openInfo() {
+      infoOverlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      infoClose.focus();
+    }
+    function closeInfo() {
+      infoOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      infoBtn.focus();
+    }
+
+    infoBtn.addEventListener('click', openInfo);
+    infoClose.addEventListener('click', closeInfo);
+
+    infoOverlay.addEventListener('click', (e) => {
+      if (e.target === infoOverlay) closeInfo();
+    });
+
+    // ---------- TUTORIAL MODAL ----------
+    const tutorialBtn = document.getElementById('tutorialBtn');
+    const tutorialOverlay = document.getElementById('tutorialOverlay');
+    const tutorialClose = document.getElementById('tutorialClose');
+    const tutorialFrame = document.getElementById('tutorialFrame');
+
+    const tutorialSrc = "https://www.youtube.com/embed/Gnbyt7bjC9c";
+    const tutorialSrcAutoplay = "https://www.youtube.com/embed/Gnbyt7bjC9c?autoplay=1";
+
+    function openTutorial() {
+      tutorialOverlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      tutorialFrame.src = tutorialSrcAutoplay;
+      tutorialClose.focus();
+    }
+    function closeTutorial() {
+      tutorialOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      tutorialFrame.src = tutorialSrc;
+      tutorialBtn.focus();
+    }
+
+    tutorialBtn.addEventListener('click', openTutorial);
+    tutorialClose.addEventListener('click', closeTutorial);
+
+    tutorialOverlay.addEventListener('click', (e) => {
+      if (e.target === tutorialOverlay) closeTutorial();
+    });
+
+    // ---------- ESC CLOSE (both modals) ----------
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (!infoOverlay.classList.contains('hidden')) closeInfo();
+      if (!tutorialOverlay.classList.contains('hidden')) closeTutorial();
+    });
+
+    // ---------- AUDIO BUTTON ----------
+    const audioBtn = document.getElementById('audioBtn');
+    const bgAudio = document.getElementById('bgAudio');
+    let isPlaying = false;
+
+    audioBtn.addEventListener('click', () => {
+      if (!isPlaying) {
+        bgAudio.play();
+        isPlaying = true;
+        audioBtn.classList.add('playing');
+      } else {
+        bgAudio.pause();
+        isPlaying = false;
+        audioBtn.classList.remove('playing');
+      }
+    });
+
+    // ---------- INIT ----------
+    setCustomVisibility(); // also hides W/H when not custom
+    checkFit();
+  </script>
+</body>
+</html>
